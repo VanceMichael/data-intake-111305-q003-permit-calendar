@@ -47,8 +47,46 @@
   },
   "routes": {
     "/feed": {
-      "body": "<!doctype html><html lang='zh'><meta charset='utf-8'><title>来源目录</title><body>\n<article><h2>P26-8</h2>\n<dl><dt>authority</dt><dd>north</dd><dt>notice_id</dt><dd>P26-8</dd><dt>edition</dt><dd>first</dd><dt>kind</dt><dd>issued</dd><dt>published</dt><dd>2026-11-01</dd><dt>precision</dt><dd>day</dd><dt>start</dt><dd>2026-11-10</dd></dl>\n</article>\n<article><h2>P26-8</h2>\n<dl><dt>authority</dt><dd>north</dd><dt>notice_id</dt><dd>P26-8</dd><dt>edition</dt><dd>withdraw</dd><dt>kind</dt><dd>withdrawn</dd><dt>replaces</dt><dd>first</dd><dt>published</dt><dd>2026-11-03</dd><dt>precision</dt><dd>day</dd></dl>\n</article>\n<article><h2>P26-8</h2>\n<dl><dt>authority</dt><dd>north</dd><dt>notice_id</dt><dd>P26-8</dd><dt>edition</dt><dd>reissue</dd><dt>kind</dt><dd>issued</dd><dt>replaces</dt><dd>withdraw</dd><dt>published</dt><dd>2026-11-03</dd><dt>precision</dt><dd>day</dd><dt>start</dt><dd>2026-11-17</dd></dl>\n</article>\n<article><h2>P26-8</h2>\n<dl><dt>authority</dt><dd>south</dd><dt>notice_id</dt><dd>P26-8</dd><dt>edition</dt><dd>s1</dd><dt>kind</dt><dd>issued</dd><dt>published</dt><dd>2026-11-03</dd><dt>precision</dt><dd>day</dd></dl>\n</article>\n<script type=\"application/json\" id=\"source-records\">[{\"authority\": \"north\", \"notice_id\": \"P26-8\", \"edition\": \"first\", \"kind\": \"issued\", \"published\": \"2026-11-01\", \"precision\": \"day\", \"start\": \"2026-11-10\"}, {\"authority\": \"north\", \"notice_id\": \"P26-8\", \"edition\": \"withdraw\", \"kind\": \"withdrawn\", \"replaces\": \"first\", \"published\": \"2026-11-03\", \"precision\": \"day\"}, {\"authority\": \"north\", \"notice_id\": \"P26-8\", \"edition\": \"reissue\", \"kind\": \"issued\", \"replaces\": \"withdraw\", \"published\": \"2026-11-03\", \"precision\": \"day\", \"start\": \"2026-11-17\"}, {\"authority\": \"south\", \"notice_id\": \"P26-8\", \"edition\": \"s1\", \"kind\": \"issued\", \"published\": \"2026-11-03\", \"precision\": \"day\"}]</script></body></html>",
-      "content_type": "text/html; charset=utf-8",
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "withdraw",
+            "kind": "withdrawn",
+            "replaces": "first",
+            "published": "2026-11-03",
+            "precision": "day"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "reissue",
+            "kind": "issued",
+            "replaces": "withdraw",
+            "published": "2026-11-03",
+            "precision": "day",
+            "start": "2026-11-17"
+          },
+          {
+            "authority": "south",
+            "notice_id": "P26-8",
+            "edition": "s1",
+            "kind": "issued",
+            "published": "2026-11-03",
+            "precision": "day"
+          }
+        ]
+      },
       "headers": {
         "ETag": "feed-1"
       }

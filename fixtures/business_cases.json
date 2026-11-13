@@ -1,17 +1,17 @@
 [
   {
-    "name": "cache_after_withdrawal",
-    "situation": "旧页抓取时间晚于撤回页",
-    "observable": "不能复活撤回版本"
+    "name": "name",
+    "situation": "situation",
+    "observable": "observable"
   },
   {
-    "name": "same_day_uncertain",
-    "situation": "同日声明互无引用",
-    "observable": "保留未决顺序及原文"
+    "name": "name",
+    "situation": "situation",
+    "observable": "observable"
   },
   {
-    "name": "historical_decision",
-    "situation": "项目已留存进场依据",
-    "observable": "新公告不改写历史判断"
+    "name": "name",
+    "situation": "situation",
+    "observable": "observable"
   }
 ]
