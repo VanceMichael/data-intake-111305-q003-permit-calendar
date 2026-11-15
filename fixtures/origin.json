@@ -181,6 +181,37 @@
           }
         ]
       }
+    },
+    "/observations/5": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          }
+        ]
+      }
+    },
+    "/absent-index": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "absent-1",
+            "kind": "absent",
+            "scope": "replacement",
+            "text": "经检索本机关公告库，P26-8 撤回后不存在替代公告",
+            "published": "2026-11-05",
+            "precision": "day"
+          }
+        ]
+      }
     }
   }
 }

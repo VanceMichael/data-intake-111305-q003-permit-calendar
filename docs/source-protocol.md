@@ -18,8 +18,20 @@
 
 ## 领域样例
 
-- `name`：situation；业务侧关注observable。
-- `name`：situation；业务侧关注observable。
-- `name`：situation；业务侧关注observable。
+合成场景围绕机关 `north` 的公告 `P26-8` 展开：`first`（首发，2026-11-01 发布、
+2026-11-10 生效）被 `withdraw`（2026-11-03，`replaces=first`）撤回，`reissue`
+（同日，`replaces=withdraw`，2026-11-17 生效）引用撤回件重发；机关 `south` 另有
+同编号 `P26-8` 的独立公告，用于验证身份不跨机关合并。所有日期均为日级精度，
+`withdraw` 与 `reissue` 同日且靠显式引用区分，不能按输入顺序排序。
 
-另外提供 `/rate-limited`、`/unstable`、`/range`、`/range-ignored`、`/truncated`、`/observations/1`、`/observations/2`、`/observations/3`、`/observations/4`。响应内容和版本由场景文件逐项声明，便于核对实际收到的来源资料。
+记录支持的 `kind`：`issued`、`withdrawn`、`corrected`、`absent`。`absent` 记录用
+`scope`（edition/replacement/notice）声明否定范围，例如 `/absent-index` 路由声明
+撤回后不存在替代公告；它是覆盖度证据，不参与修订链。`replaces` 是显式版本引用，
+`cites` 保留更正引用，`text` 保留原文表述。
+
+`/observations/5` 返回与首发同载荷的迟到页面，用于演练“搜索缓存晚到旧页面不能
+恢复效力”；效力判断规则见 `docs/lifecycle.md`。
+
+另外提供 `/rate-limited`、`/unstable`、`/range`、`/range-ignored`、`/truncated`、
+`/observations/1` 至 `/observations/5` 与 `/absent-index`。响应内容和版本由场景文件
+逐项声明，便于核对实际收到的来源资料。

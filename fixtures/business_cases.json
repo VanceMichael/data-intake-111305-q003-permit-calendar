@@ -1,17 +1,44 @@
 [
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "撤回后重发",
+    "situation": "同一发布机关、同一公告编号下，首发被明确撤回，随后一份发布声明引用撤回件并重发，许可恢复效力",
+    "observable": "链状态随引用边 first -> withdraw -> reissue 推进；重发为 head 时状态恢复 effective/scheduled，输出保留撤回与重发的原文引用关系，不依赖抓取顺序",
+    "fixture_routes": ["/observations/1", "/observations/2", "/observations/3"]
   },
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "同日两份互不引用公告",
+    "situation": "两份声明只有日级发布日期且落在同一天，互相没有 replaces/cites 引用",
+    "observable": "日级时间戳的精度区间重叠，先后不可判定；线程保持 pending_verification，冲突条目同时展示两份原文，禁止按抓取顺序编造先后",
+    "fixture_routes": ["/observations/2", "/observations/3"]
   },
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "搜索缓存迟到的旧页面",
+    "situation": "已观察到明确撤回文本后，搜索缓存晚到一份同编号旧页面，内容与首发相同或互不引用",
+    "observable": "同载荷重复只记为 reobservation，撤回不被推翻；互不引用的晚到新载荷产生 late_unlinked_issuance 冲突，效力不会自动恢复，只有引用撤回件的真正重发才能恢复",
+    "fixture_routes": ["/observations/1", "/observations/2", "/observations/5"]
+  },
+  {
+    "name": "未见到替代页不等于不存在",
+    "situation": "撤回后归档中没有任何替代页；另有来源给出覆盖 replacement 范围的 absent 声明",
+    "observable": "默认 replacement_status=not_seen（开放世界）；存在 scope 覆盖的 absent 声明时才给出 confirmed_absent 并附原文，结论仅在声明范围内成立",
+    "fixture_routes": ["/absent-index"]
+  },
+  {
+    "name": "进场依据留档不可改写",
+    "situation": "项目人员把某次查询保存为进场依据，之后来源又发布更正或撤回",
+    "observable": "快照只追加保存，边界是一组 capture_id 与视图指纹；verify 用同一批 capture 重新派生并比对指纹，后续观察不参与重算，历史记录保持原样",
+    "fixture_routes": []
+  },
+  {
+    "name": "跨机关同编号",
+    "situation": "north 与 south 两个发布机关使用相同公告编号 P26-8",
+    "observable": "线程身份为 (authority, notice_id)，两个机关的公告互不引用、各自独立判断，编号相同不合并",
+    "fixture_routes": ["/observations/1", "/observations/4"]
+  },
+  {
+    "name": "声明互相矛盾",
+    "situation": "同一 edition 标识出现不同原文，或同一版本被多个后继同时替代",
+    "observable": "线程状态置 conflict，冲突条目带原因码与全部相关原文，系统不选择看起来最新的页面宣布解决",
+    "fixture_routes": []
   }
 ]

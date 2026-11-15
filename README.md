@@ -33,11 +33,28 @@ python3 -m permit_calendar serve
 python3 -m permit_calendar capture --base-url http://127.0.0.1:实际端口 --archive .runtime/raw.sqlite3 --source local-source --path /feed
 ```
 
-归档库只追加来源观察，不用最后一条响应覆盖先前响应。`archive.py` 管理原始内容及完整性，`client.py` 执行一次请求，`decoding.py` 负责来源格式解码，`origin.py` 提供协议演练。业务解释可与原始接收独立演进。
+归档库只追加来源观察，不用最后一条响应覆盖先前响应。`archive.py` 管理原始内容及完整性，`client.py` 执行一次请求，`decoding.py` 负责来源格式解码，`origin.py` 提供协议演练。业务解释与原始接收独立演进。
+
+## 公告生命周期与效力判断
+
+在只追加归档之上，`lifecycle.py` 把来源记录抽取为带双时间轴的声明（来源声明时间含日/时/分/秒精度，采集观察时间来自归档），按 `(authority, notice_id)` 构建 `replaces` 修订链并给出效力状态；`ledger.py` 把某次查询固化为不可改写的进场依据。规则与衔接见 `docs/lifecycle.md`，要点：
+
+- 日级时间戳按精度区间比较，同日且互不引用的公告保持 `pending_verification`，不用抓取顺序编造先后；
+- 明确撤回后，迟到的同载荷旧页面只记为重复观察，互不引用的晚到新载荷产生 `late_unlinked_issuance` 冲突，许可不会自动恢复；只有显式引用撤回件的重发才能恢复效力，且视图保留撤回关系与原文；
+- 替代页查询区分 `not_seen`（未见到，开放世界）、`observed`（已观察到引用页）与 `confirmed_absent`（来源 absent 声明且 scope 覆盖）；
+- 冲突是一等输出，附原因码与全部相关原文，不挑选“看起来最新”的页面宣布解决；
+- 快照只追加，边界是一组 capture_id 与视图指纹；`verify` 用同一批原始观察重算，后续更正不参与，进场依据不可被改写。
+
+```sh
+python3 -m permit_calendar derive --archive .runtime/raw.sqlite3
+python3 -m permit_calendar derive --archive .runtime/raw.sqlite3 --observed-by 2026-11-10T08:00:01Z
+python3 -m permit_calendar snapshot save --archive .runtime/raw.sqlite3 --ledger .runtime/ledger.sqlite3 --purpose "进场依据"
+python3 -m permit_calendar snapshot verify --archive .runtime/raw.sqlite3 --ledger .runtime/ledger.sqlite3 --snapshot-id 1
+```
 
 ## 开发资料
 
-来源协议见 `docs/source-protocol.md`，领域观察关系见 `tests/test_source_contract.py`。`fixtures/business_cases.json` 保存业务侧关注的交错情况及可观察口径；基础版测试验证的是原始采集和协议，不代表业务处理已经具备这些能力。所有条目、机构、文件内容和门户回执均为本地合成资料，不包含真实用户身份。
+来源协议见 `docs/source-protocol.md`，生命周期衔接见 `docs/lifecycle.md`，领域观察关系见 `tests/test_source_contract.py`。`fixtures/business_cases.json` 保存业务侧关注的交错情况及可观察口径；`tests/test_lifecycle.py` 逐条固化这些口径（撤回-重发链、同日待核、迟到缓存、替代页三态、留档不可改写、跨机关与原文冲突）。所有条目、机构、文件内容和门户回执均为本地合成资料，不包含真实用户身份。
 
 ## Wheel 分发
 
