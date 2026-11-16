@@ -1,17 +1,116 @@
 [
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "撤回后重发恢复效力并展示关系",
+    "situation": "north/P26-8：first（2026-11-01 发布，开工 2026-11-10）被 2026-11-03 的撤回页替代，同日重发页 replaces 撤回页，开工改为 2026-11-17",
+    "observable": "状态 effective；头部为 reissue；链依次展示 first→withdraw→reissue；覆盖口径为 absent_as_of（有完整列表观察佐证）",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/stage/3", "scope": "enumeration"},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "reissue",
+                  "chain": ["first", "withdraw", "reissue"], "coverage": "absent_as_of"}}
+    ]
   },
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "搜索缓存晚到旧页不恢复效力",
+    "situation": "撤回观察入库之后，搜索缓存再次提供 first 旧页",
+    "observable": "状态保持 withdrawn；first 的再次出现只记为已替代版本的又一次观察，不改变头部",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/cache/first"},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "withdrawn", "head": "withdraw"}}
+    ]
   },
   {
-    "name": "name",
-    "situation": "situation",
-    "observable": "observable"
+    "name": "同日互不引用的公告保持待核",
+    "situation": "reissue 与 reissue-b 均为 2026-11-03 日级精度且互不引用，抓取顺序不能编出先后",
+    "observable": "状态 pending；冲突类型 competing_heads；两个头部版本都列出；不宣布任何一方有效",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/stage/3", "scope": "enumeration"},
+      {"capture": "/stage/4", "scope": "enumeration"},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "pending", "conflicts": ["competing_heads"],
+                  "heads": ["reissue", "reissue-b"]}}
+    ]
+  },
+  {
+    "name": "未见到替代页不同于确认不存在替代页",
+    "situation": "只凭单页观察见到 reissue，没有任何完整列表观察",
+    "observable": "状态 effective，但覆盖口径为 not_observed（未见到替代页），不得表述为不存在替代页",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/single/reissue"},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "reissue", "coverage": "not_observed"}}
+    ]
+  },
+  {
+    "name": "内容未变确认延长覆盖口径",
+    "situation": "完整列表观察后，以 If-None-Match 再请求得到 304",
+    "observable": "覆盖口径为 absent_as_of，且口径时点延伸到 304 那次捕获",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"capture": "/stage/1", "headers": {"If-None-Match": "lc-1"}},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "first", "coverage": "absent_as_of", "horizon": 2}}
+    ]
+  },
+  {
+    "name": "同编号跨机关互不影响",
+    "situation": "south/P26-8 与 north/P26-8 编号相同、发布机关不同",
+    "observable": "south 独立判断为 effective；north 的撤回不波及 south",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/south/feed"},
+      {"status": {"authority": "south", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "s1"}},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "withdrawn", "head": "withdraw"}}
+    ]
+  },
+  {
+    "name": "留档不被后续更正改写",
+    "situation": "只见 first 时保存进场依据，之后来源推进到重发",
+    "observable": "留档仍显示 first/effective 且校验一致；当前判断已变为 reissue/effective",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"snapshot": {"authority": "north", "notice_id": "P26-8", "purpose": "进场依据：示例项目甲"},
+       "save_as": "basis"},
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/stage/3", "scope": "enumeration"},
+      {"snapshot_show": "basis",
+       "expect": {"state": "effective", "head": "first"}},
+      {"snapshot_verify": "basis", "expect": {"intact": true}},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "reissue"}}
+    ]
+  },
+  {
+    "name": "历史时点查询各阶段判断",
+    "situation": "同一公告在不同知识截止下重算",
+    "observable": "截止第 1 次捕获为 effective/first；截止第 2 次为 withdrawn；当前为 effective/reissue",
+    "scenario": "lifecycle.json",
+    "steps": [
+      {"capture": "/stage/1", "scope": "enumeration"},
+      {"capture": "/stage/2", "scope": "enumeration"},
+      {"capture": "/stage/3", "scope": "enumeration"},
+      {"status": {"authority": "north", "notice_id": "P26-8"}, "as_of_capture": 1,
+       "expect": {"state": "effective", "head": "first"}},
+      {"status": {"authority": "north", "notice_id": "P26-8"}, "as_of_capture": 2,
+       "expect": {"state": "withdrawn", "head": "withdraw"}},
+      {"status": {"authority": "north", "notice_id": "P26-8"},
+       "expect": {"state": "effective", "head": "reissue"}}
+    ]
   }
 ]

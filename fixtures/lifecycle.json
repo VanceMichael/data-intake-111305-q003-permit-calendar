@@ -1,0 +1,185 @@
+{
+  "identity_fields": [
+    "authority",
+    "notice_id",
+    "edition"
+  ],
+  "portal": {
+    "csrf": "lifecycle-local"
+  },
+  "routes": {
+    "/stage/1": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          }
+        ]
+      },
+      "headers": {
+        "ETag": "lc-1"
+      }
+    },
+    "/stage/2": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "withdraw",
+            "kind": "withdrawn",
+            "replaces": "first",
+            "published": "2026-11-03",
+            "precision": "day"
+          }
+        ]
+      },
+      "headers": {
+        "ETag": "lc-2"
+      }
+    },
+    "/stage/3": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "withdraw",
+            "kind": "withdrawn",
+            "replaces": "first",
+            "published": "2026-11-03",
+            "precision": "day"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "reissue",
+            "kind": "issued",
+            "replaces": "withdraw",
+            "published": "2026-11-03",
+            "precision": "day",
+            "start": "2026-11-17"
+          }
+        ]
+      },
+      "headers": {
+        "ETag": "lc-3"
+      }
+    },
+    "/stage/4": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "withdraw",
+            "kind": "withdrawn",
+            "replaces": "first",
+            "published": "2026-11-03",
+            "precision": "day"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "reissue",
+            "kind": "issued",
+            "replaces": "withdraw",
+            "published": "2026-11-03",
+            "precision": "day",
+            "start": "2026-11-17"
+          },
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "reissue-b",
+            "kind": "issued",
+            "published": "2026-11-03",
+            "precision": "day",
+            "start": "2026-11-20"
+          }
+        ]
+      },
+      "headers": {
+        "ETag": "lc-4"
+      }
+    },
+    "/cache/first": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "first",
+            "kind": "issued",
+            "published": "2026-11-01",
+            "precision": "day",
+            "start": "2026-11-10"
+          }
+        ]
+      }
+    },
+    "/single/reissue": {
+      "json": {
+        "items": [
+          {
+            "authority": "north",
+            "notice_id": "P26-8",
+            "edition": "reissue",
+            "kind": "issued",
+            "replaces": "withdraw",
+            "published": "2026-11-03",
+            "precision": "day",
+            "start": "2026-11-17"
+          }
+        ]
+      }
+    },
+    "/south/feed": {
+      "json": {
+        "items": [
+          {
+            "authority": "south",
+            "notice_id": "P26-8",
+            "edition": "s1",
+            "kind": "issued",
+            "published": "2026-11-03",
+            "precision": "day"
+          }
+        ]
+      }
+    }
+  }
+}

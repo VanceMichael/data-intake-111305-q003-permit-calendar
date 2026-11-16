@@ -36,7 +36,7 @@ class Client:
             )
 
 
-def collect(client, archive, source, path="/feed"):
-    response = client.fetch(path)
+def collect(client, archive, source, path="/feed", headers=None):
+    response = client.fetch(path, headers=headers)
     capture_id = archive.append(source, response.url, response.status, response.headers, response.body)
     return capture_id, response

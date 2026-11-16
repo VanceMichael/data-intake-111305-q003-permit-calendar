@@ -18,8 +18,8 @@
 
 ## 领域样例
 
-- `name`：situation；业务侧关注observable。
-- `name`：situation；业务侧关注observable。
-- `name`：situation；业务侧关注observable。
+`fixtures/origin.json` 的 `/feed` 提供一组修订链样例：`north` 机关的 `P26-8` 依次有首发（`first`）、撤回（`withdraw`，引用 `first`）、重发（`reissue`，引用 `withdraw`）三个版本，撤回与重发同为日级精度的同一日；`south` 机关另有同编号 `P26-8` 的独立公告，用于核对跨机关身份不混淆。`/observations/1` 至 `/observations/4` 逐条提供上述记录。
+
+`fixtures/lifecycle.json` 把同一条链拆成交错序列，供生命周期演示与业务用例：`/stage/1` 至 `/stage/4` 是逐阶段推进的完整列表（带 ETag `lc-1` 至 `lc-4`，可演练 304），`/cache/first` 模拟搜索缓存晚到的旧页，`/single/reissue` 模拟无完整列表佐证的单页观察，`/south/feed` 提供另一机关的同编号公告。业务侧关注的交错情形及可观察口径以 `fixtures/business_cases.json` 为准。
 
 另外提供 `/rate-limited`、`/unstable`、`/range`、`/range-ignored`、`/truncated`、`/observations/1`、`/observations/2`、`/observations/3`、`/observations/4`。响应内容和版本由场景文件逐项声明，便于核对实际收到的来源资料。
